@@ -1,6 +1,7 @@
 import React from 'react';
 import Papa from 'papaparse';
 import './App.css';
+import { DialogDemo } from './ui/a';
 
 interface Page {
   first: string;
@@ -82,6 +83,7 @@ function App() {
         <h1 className="text-3xl font-bold underline">1CSV File Upload</h1>
         <input type="file" onChange={handleFileChange} />
       </div>
+      <DialogDemo />
       <div className="container mx-auto p-4">
         {flashCard.length > 0 ? <FlashCardContainer flashCard={{ pages: flashCard }} cursor={cursor} /> : null}
       </div>
