@@ -1,6 +1,6 @@
-import { useEffect, useState, useRef, useCallback, useContext, createContext, ReactNode } from 'react';
+import { useState, useContext, createContext, ReactNode } from 'react';
 import Papa from 'papaparse';
-import { Row, row2Page, defaultSetting, genRow2Page, indexMapping, Setting } from './model';
+import { Row, defaultSetting, genRow2Page, indexMapping, Setting } from './model';
 
 type FlashCardContextType = {
     flashCard: Row[],

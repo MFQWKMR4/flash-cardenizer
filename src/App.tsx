@@ -14,7 +14,7 @@ function App() {
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
     };
-  }, [flashCard, cursor]);
+  }, [handleKeyPress, flashCard, cursor]);
 
   console.log('cursor:', cursor);
 
