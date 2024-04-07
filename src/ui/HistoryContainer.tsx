@@ -8,7 +8,7 @@ export function HistoryContainer() {
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-3xl font-bold underline">History</h1>
-            {history.histories.map((eh: ExecutionHistory, index: number) => (
+            {history && history.histories && history.histories.map((eh: ExecutionHistory, index: number) => (
                 <div key={index} className="border p-4 mt-2">
                     <div>start: {eh.startDatetime}</div>
                     <div>end: {eh.endDatetime}</div>
