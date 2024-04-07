@@ -3,10 +3,13 @@ import './App.css';
 import { SettingDialog } from '@/ui/SettingDialog';
 import { useFlashCard } from './lib/FcProvider';
 import { Button } from './components/ui/button';
+import { HistoryContainer } from './ui/HistoryContainer';
+import { useRecord } from './lib/RecordProvider';
 
 function App() {
 
   const { flashCard, cursor, handleKeyPress } = useFlashCard();
+  const { fireGoButton, fireFinButton, setSuccessCount } = useRecord();
   const [isExecuting, setIsExecuting] = React.useState(false);
 
   React.useEffect(() => {
@@ -23,7 +26,13 @@ function App() {
       <div className='flex justify-between'>
         <SettingDialog />
         {flashCard.length > 0 ? <Button onClick={() => {
-          setIsExecuting(!isExecuting)
+          if (isExecuting) {
+            fireFinButton();
+            setSuccessCount(0);
+          } else {
+            fireGoButton();
+          }
+          setIsExecuting(!isExecuting);
         }}>{isExecuting ? "Fin" : "Go!"}</Button> : null}
       </div>
       <div className="container mx-auto p-4">
@@ -32,15 +41,6 @@ function App() {
     </div >
   );
 }
-
-function HistoryContainer() {
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold underline">History</h1>
-    </div>
-  );
-}
-
 
 function FlashCardContainer(props: { cursor: number }) {
 

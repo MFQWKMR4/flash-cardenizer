@@ -39,10 +39,18 @@ export interface Screens {
     fourth: number[];
 }
 
+export interface ExecutionSetting {
+    size: number;
+    isRandom: boolean;
+    from: number;
+    to: number;
+}
+
 export interface Setting {
     fileName: string;
     screenPerRow: number;
     screens: Screens;
+    executionSetting?: ExecutionSetting;
 }
 
 export const defaultSetting: Setting = {
@@ -66,4 +74,23 @@ export const genRow2Page = (setting: Setting): ((row: any) => Row) => {
             fourth: setting.screens.fourth.filter((i) => i >= 0).map((i) => row[ks[i]]),
         }
     }
+}
+
+export interface ExecutionHistory {
+    startDatetime: string;
+    endDatetime: string;
+    size: number;
+    success: number;
+    isRandom: boolean;
+}
+
+export interface WrappedRow {
+    filename: string;
+    col0: string;
+}
+
+export interface FlashCardExecutionHistory {
+    executionNumber: number;
+    histories: ExecutionHistory[];
+    recordedRows: WrappedRow[];
 }

@@ -37,7 +37,6 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
     const [setting, setSetting] = useState(defaultSetting);
 
     const handleFileChange = (event) => {
-        console.log("event.target.files.length")
         console.log(event.target.files.length)
         if (event.target.files.length > 0) {
             const file = event.target.files[0];
@@ -73,14 +72,31 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
 
     const generateFlashCard = () => {
         console.log(JSON.stringify(setting));
-        console.log(tmp);
         const row2Page = genRow2Page(setting);
-        const pages = tmp.map((r) => {
-            console.log(r);
-            return row2Page(r)
-        });
-        console.log(pages);
-        setFlashCard(pages);
+
+        const entire = tmp.length;
+        const from = setting.executionSetting?.from || 1;
+        const to = setting.executionSetting?.to || entire;
+        if (from < to) {
+            const slicedTmp = tmp.slice(from - 1, to);
+            const pages = slicedTmp.map((r) => {
+                return row2Page(r)
+            });
+            console.log(pages);
+            if (setting.executionSetting?.isRandom) {
+                shuffle(pages);
+            }
+            const pageSize = setting.executionSetting?.size || pages.length;
+            const generatedPages = pages.slice(0, pageSize);
+            setFlashCard(generatedPages);
+        } else {
+            console.log('[error] invalid range');
+            const pages = tmp.map((r) => {
+                return row2Page(r)
+            });
+            console.log(pages);
+            setFlashCard(pages);
+        }
     }
 
     const getDisplay = (cursor: number): string[] => {
@@ -100,4 +116,11 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
 
 export const useFlashCard = () => {
     return useContext(FlashCardContext);
+}
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }

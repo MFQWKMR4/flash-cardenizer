@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     Dialog,
     DialogContent,
@@ -12,10 +13,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useFlashCard } from "@/lib/FcProvider";
 import { Setting, indexMapping } from "@/lib/model";
+import { CheckedState } from "@radix-ui/react-checkbox";
 import { useState } from "react";
 
 export function SettingDialog() {
-    const { setSetting, handleFileChange, generateFlashCard } = useFlashCard();
+    const { setting, setSetting, handleFileChange, generateFlashCard } = useFlashCard();
 
     const [numberOfScreenPerRow, setNumberOfScreenPerRow] = useState(2);
     const [numberOfDisplayedDisplayColumnInputField1, setNumberOfDisplayedDisplayColumnInputField1] = useState(1);
@@ -86,6 +88,31 @@ export function SettingDialog() {
         });
     }
 
+    const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSetting((setting: Setting) => {
+            return { ...setting, executionSetting: { ...setting.executionSetting, size: Number(e.target.value) } };
+        });
+    }
+
+    const handleRandomChange = (e: CheckedState) => {
+        const isRandom = e === true ? true : false;
+        setSetting((setting: Setting) => {
+            return { ...setting, executionSetting: { ...setting.executionSetting, isRandom } };
+        });
+    }
+
+    const handleFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSetting((setting: Setting) => {
+            return { ...setting, executionSetting: { ...setting.executionSetting, from: Number(e.target.value) } };
+        });
+    }
+
+    const handleToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSetting((setting: Setting) => {
+            return { ...setting, executionSetting: { ...setting.executionSetting, to: Number(e.target.value) } };
+        });
+    }
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -148,11 +175,70 @@ export function SettingDialog() {
                             }
                         </div>
                     </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="size" className="text-right">
+                            Size
+                        </Label>
+                        <Input
+                            id="size"
+                            type="number"
+                            defaultValue={10}
+                            min={1}
+                            max={1000}
+                            className="col-span-3"
+                            onChange={handleSizeChange}
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="size" className="text-right">
+                            Random?
+                        </Label>
+                        <div className="flex items-center space-x-2">
+                            <Checkbox
+                                id="random"
+                                checked={setting.executionSetting?.isRandom ?? false}
+                                onCheckedChange={handleRandomChange}
+                            />
+                            <label
+                                htmlFor="random"
+                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                                random ON
+                            </label>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="from" className="text-right">
+                            From
+                        </Label>
+                        <Input
+                            id="from"
+                            type="number"
+                            defaultValue={1}
+                            min={1}
+                            max={10000}
+                            className="col-span-3"
+                            onChange={handleFromChange}
+                        />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="to" className="text-right">
+                            To
+                        </Label>
+                        <Input
+                            id="to"
+                            type="number"
+                            defaultValue={100}
+                            min={1}
+                            max={10000}
+                            className="col-span-3"
+                            onChange={handleToChange}
+                        />
+                    </div>
                 </div>
                 <DialogFooter>
                     <Button type="submit" onClick={() => {
                         generateFlashCard();
-                        console.log('generateFlashCard');
                     }}>Save changes</Button>
                 </DialogFooter>
             </DialogContent>

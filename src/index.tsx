@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { FlashCardProvider } from './lib/FcProvider';
+import { RecordProvider } from './lib/RecordProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <FlashCardProvider >
-      <App />
+      <RecordProvider>
+        <App />
+      </RecordProvider>
     </FlashCardProvider>
   </React.StrictMode>
 );
