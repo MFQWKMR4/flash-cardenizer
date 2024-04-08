@@ -37,6 +37,8 @@ export function RecordProvider({ children }: { children?: ReactNode }) {
     const appendHistory = (eh: ExecutionHistory) => {
         if (!history.histories) {
             setHistory({ histories: [eh], executionNumber: 1, recordedRows: [] });
+            localStorage.setItem(localStorageKey, JSON.stringify({ histories: [eh], executionNumber: 1, recordedRows: [] }));
+
         } else {
             history.histories.push(eh);
             history.executionNumber = history.executionNumber + 1;

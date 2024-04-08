@@ -182,7 +182,6 @@ export function SettingDialog() {
                         <Input
                             id="size"
                             type="number"
-                            defaultValue={10}
                             min={1}
                             max={1000}
                             className="col-span-3"
@@ -214,7 +213,6 @@ export function SettingDialog() {
                         <Input
                             id="from"
                             type="number"
-                            defaultValue={1}
                             min={1}
                             max={10000}
                             className="col-span-3"
@@ -228,7 +226,6 @@ export function SettingDialog() {
                         <Input
                             id="to"
                             type="number"
-                            defaultValue={100}
                             min={1}
                             max={10000}
                             className="col-span-3"
