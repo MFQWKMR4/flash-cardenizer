@@ -47,8 +47,6 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
                     const data = result.data;
                     console.log(data);
                     setTmp(data);
-                    // const pages = data.map(row2Page);
-                    // setFlashCard(pages);
                 },
                 header: true,
             });
@@ -63,12 +61,13 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
             console.log('flashCard is empty');
             return;
         }
+        const numScreen = setting.screenPerRow * flashCard.length;
         if (event.key === 'ArrowRight') {
-            setCursor((cursor + 1) % flashCard.length);
+            setCursor((cursor + 1) % numScreen);
         }
 
         if (event.key === 'ArrowLeft') {
-            setCursor((cursor - 1 + flashCard.length) % flashCard.length);
+            setCursor((cursor - 1 + numScreen) % numScreen);
         }
     };
 
