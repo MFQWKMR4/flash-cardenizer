@@ -1,4 +1,4 @@
-import { useState, useContext, createContext, ReactNode } from 'react';
+import { useState, useContext, createContext, ReactNode, useEffect } from 'react';
 import Papa from 'papaparse';
 import { Row, defaultSetting, genRow2Page, indexMapping, Setting } from './model';
 
@@ -29,6 +29,8 @@ const DefaultFlashCardContext: FlashCardContextType = {
 }
 
 export const FlashCardContext = createContext(DefaultFlashCardContext)
+
+const localStorageKey = 'FlashCardSettings';
 
 export function FlashCardProvider({ children }: { children?: ReactNode }) {
     const [tmp, setTmp] = useState([] as any[]);
@@ -72,6 +74,7 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
 
     const generateFlashCard = () => {
         console.log(JSON.stringify(setting));
+        localStorage.setItem(localStorageKey, JSON.stringify(setting));
         const row2Page = genRow2Page(setting);
 
         const entire = tmp.length;
@@ -106,6 +109,13 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
         const displayStrings = row[screenKey];
         return displayStrings;
     }
+
+    useEffect(() => {
+        const s = localStorage.getItem(localStorageKey);
+        if (s) {
+            setSetting(JSON.parse(s));
+        }
+    }, []);
 
     return (
         <FlashCardContext.Provider value={{ flashCard, cursor, setting, setFlashCard, setCursor, setSetting, handleFileChange, handleKeyPress, generateFlashCard, getDisplay }}>
