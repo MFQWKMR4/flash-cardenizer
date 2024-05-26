@@ -6,15 +6,14 @@ type RecordContextType = {
     history: FlashCardExecutionHistory,
     fireGoButton: () => void,
     fireFinButton: () => void,
-    setSuccessCount: (count: number) => void,
-
+    incrementNgCount: () => void,
 }
 
 const DefaultRecordContext: RecordContextType = {
     history: { histories: [], executionNumber: 0, recordedRows: [] },
     fireGoButton: () => { },
     fireFinButton: () => { },
-    setSuccessCount: () => { },
+    incrementNgCount: () => { },
 }
 
 export const RecordContext = createContext(DefaultRecordContext)
@@ -29,10 +28,14 @@ export function RecordProvider({ children }: { children?: ReactNode }) {
         startDatetime: '',
         endDatetime: '',
         size: 0,
-        success: 0,
+        ng: 0,
         isRandom: false,
     } as ExecutionHistory);
-    const [successCount, setSuccessCount] = useState(0);
+    const [ngCount, setNgCount] = useState(0);
+
+    const incrementNgCount = () => {
+        setNgCount((prev) => prev + 1);
+    }
 
     const appendHistory = (eh: ExecutionHistory) => {
         if (!history.histories) {
@@ -58,7 +61,7 @@ export function RecordProvider({ children }: { children?: ReactNode }) {
 
     const fireFinButton = () => {
         currentExecution.endDatetime = new Date().toISOString();
-        currentExecution.success = successCount;
+        currentExecution.ng = ngCount;
         appendHistory(currentExecution);
 
         // reset
@@ -66,7 +69,7 @@ export function RecordProvider({ children }: { children?: ReactNode }) {
             startDatetime: '',
             endDatetime: '',
             size: setting.executionSetting?.size || 0,
-            success: 0,
+            ng: 0,
             isRandom: setting.executionSetting?.isRandom || false,
         });
     };
@@ -79,7 +82,7 @@ export function RecordProvider({ children }: { children?: ReactNode }) {
     }, []);
 
     return (
-        <RecordContext.Provider value={{ history, fireGoButton, fireFinButton, setSuccessCount }}>
+        <RecordContext.Provider value={{ history, fireGoButton, fireFinButton, incrementNgCount }}>
             {children}
         </RecordContext.Provider>
     )

@@ -9,7 +9,7 @@ import { useRecord } from './lib/RecordProvider';
 function App() {
 
   const { flashCard, cursor, handleKeyPress } = useFlashCard();
-  const { fireGoButton, fireFinButton, setSuccessCount } = useRecord();
+  const { fireGoButton, fireFinButton } = useRecord();
   const [isExecuting, setIsExecuting] = React.useState(false);
 
   React.useEffect(() => {
@@ -28,7 +28,6 @@ function App() {
         {flashCard.length > 0 ? <Button onClick={() => {
           if (isExecuting) {
             fireFinButton();
-            setSuccessCount(0);
           } else {
             fireGoButton();
           }
@@ -44,6 +43,7 @@ function App() {
 
 function FlashCardContainer(props: { cursor: number }) {
 
+  const { incrementNgCount } = useRecord();
   const { getDisplay } = useFlashCard();
   const { cursor } = props;
   const displayStrings = getDisplay(cursor);
@@ -57,6 +57,7 @@ function FlashCardContainer(props: { cursor: number }) {
             {displayString}
           </div>
         ))}
+        <Button onClick={incrementNgCount}>+NG</Button>
       </div>
     </div>
   );

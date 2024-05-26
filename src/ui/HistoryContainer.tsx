@@ -13,7 +13,7 @@ export function HistoryContainer() {
                     <div>start: {eh.startDatetime}</div>
                     <div>end: {eh.endDatetime}</div>
                     <div>size: {eh.size}</div>
-                    <div>success: {eh.success}</div>
+                    <div>ng: {eh.ng}</div>
                     <div>isRandom: {eh.isRandom ? 'true' : 'false'}</div>
                 </div>
             ))}

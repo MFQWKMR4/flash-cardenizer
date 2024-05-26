@@ -10,6 +10,7 @@ type FlashCardContextType = {
     setCursor: (cursor: number) => void,
     setSetting: (setting: any) => void,
     handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    submitFileUrl: (url: string) => void,
     handleKeyPress: (event: KeyboardEvent) => void,
     generateFlashCard: () => void,
     getDisplay: (cursor: number) => string[],
@@ -23,6 +24,7 @@ const DefaultFlashCardContext: FlashCardContextType = {
     setCursor: () => { },
     setSetting: () => { },
     handleFileChange: () => { },
+    submitFileUrl: () => { },
     handleKeyPress: () => { },
     generateFlashCard: () => { },
     getDisplay: () => { return [] },
@@ -54,6 +56,30 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
             console.log('no file');
         }
     };
+
+    const submitFileUrl = (url: string) => {
+
+        setSetting((prev) => {
+
+            const filename = url.split('/').pop();
+            const fileUrl = { filename: filename, url: url };
+
+            const candicates = prev.cachedFileUrls?.candicates || [];
+            candicates.push(fileUrl);
+
+            prev.cachedFileUrls = { candicates: candicates };
+            return prev;
+        });
+
+        fetch(url)
+            .then((response) => response.text())
+            .then((text) => {
+                const result = Papa.parse(text, { header: true });
+                const data = result.data;
+                console.log(data);
+                setTmp(data);
+            });
+    }
 
     const handleKeyPress = (event: KeyboardEvent) => {
         console.log('key:', event.key);
@@ -117,7 +143,7 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
     }, []);
 
     return (
-        <FlashCardContext.Provider value={{ flashCard, cursor, setting, setFlashCard, setCursor, setSetting, handleFileChange, handleKeyPress, generateFlashCard, getDisplay }}>
+        <FlashCardContext.Provider value={{ flashCard, cursor, setting, setFlashCard, setCursor, setSetting, handleFileChange, submitFileUrl, handleKeyPress, generateFlashCard, getDisplay }}>
             {children}
         </FlashCardContext.Provider>
     )

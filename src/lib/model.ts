@@ -46,8 +46,18 @@ export interface ExecutionSetting {
     to: number;
 }
 
+export interface FileUrl {
+    filename: string;
+    url: string;
+}
+
+export interface FileNameUrlsCache {
+    candicates: FileUrl[];
+}
+
 export interface Setting {
     fileName: string;
+    cachedFileUrls?: FileNameUrlsCache;
     screenPerRow: number;
     screens: Screens;
     executionSetting?: ExecutionSetting;
@@ -80,7 +90,7 @@ export interface ExecutionHistory {
     startDatetime: string;
     endDatetime: string;
     size: number;
-    success: number;
+    ng: number;
     isRandom: boolean;
 }
 

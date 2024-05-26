@@ -9,15 +9,25 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useFlashCard } from "@/lib/FcProvider";
-import { Setting, indexMapping } from "@/lib/model";
+import { FileUrl, Setting, indexMapping } from "@/lib/model";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { useState } from "react";
 
 export function SettingDialog() {
-    const { setting, setSetting, handleFileChange, generateFlashCard } = useFlashCard();
+    const { setting, setSetting, handleFileChange, generateFlashCard, submitFileUrl } = useFlashCard();
+
+    const [fileUrl, setFileUrl] = useState('');
 
     const [numberOfScreenPerRow, setNumberOfScreenPerRow] = useState(2);
     const [numberOfDisplayedDisplayColumnInputField1, setNumberOfDisplayedDisplayColumnInputField1] = useState(1);
@@ -128,9 +138,31 @@ export function SettingDialog() {
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="file" className="text-right">
-                            File
+                            Choose Local File
                         </Label>
                         <Input id="file" type="file" className="col-span-3" onChange={handleFileChange} />
+                        <Label htmlFor="file" className="text-right">
+                            Or Input File URL
+                        </Label>
+                        <Input id="url" type="text" className="col-span-3" value={fileUrl} onChange={(e) => setFileUrl(e.target.value)} />
+                        <Label htmlFor="file" className="text-right">
+                            Or Select URL
+                        </Label>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>Open History</DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuLabel>↓ FileNames</DropdownMenuLabel>
+                                <DropdownMenuRadioGroup value={fileUrl} onValueChange={setFileUrl} />
+                                {setting.cachedFileUrls?.candicates.map((fu: FileUrl) => (
+                                    <DropdownMenuRadioItem value={fu.url}  >{fu.filename}</DropdownMenuRadioItem>
+                                ))}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                        {
+                            fileUrl === '' ? null : <Button type="submit" onClick={() => {
+                                submitFileUrl(fileUrl)
+                            }}>Load Remote File</Button>
+                        }
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                         <Label htmlFor="number of screen per row" className="text-right">
