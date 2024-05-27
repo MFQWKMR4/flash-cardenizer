@@ -44,7 +44,7 @@ function App() {
 function FlashCardContainer(props: { cursor: number }) {
 
   const { incrementNgCount } = useRecord();
-  const { getDisplay } = useFlashCard();
+  const { getDisplay, toNext, toPrev } = useFlashCard();
   const { cursor } = props;
   const displayStrings = getDisplay(cursor);
 
@@ -58,6 +58,10 @@ function FlashCardContainer(props: { cursor: number }) {
           </div>
         ))}
         <Button onClick={incrementNgCount}>+NG</Button>
+        <div className="flex justify-between">
+          <Button onClick={toPrev}> ← </Button>
+          <Button onClick={toNext}> → </Button>
+        </div>
       </div>
     </div>
   );

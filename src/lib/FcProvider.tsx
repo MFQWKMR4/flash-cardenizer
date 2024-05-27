@@ -12,6 +12,8 @@ type FlashCardContextType = {
     handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void,
     submitFileUrl: (url: string) => void,
     handleKeyPress: (event: KeyboardEvent) => void,
+    toNext: () => void,
+    toPrev: () => void,
     generateFlashCard: () => void,
     getDisplay: (cursor: number) => string[],
 }
@@ -26,6 +28,8 @@ const DefaultFlashCardContext: FlashCardContextType = {
     handleFileChange: () => { },
     submitFileUrl: () => { },
     handleKeyPress: () => { },
+    toNext: () => { },
+    toPrev: () => { },
     generateFlashCard: () => { },
     getDisplay: () => { return [] },
 }
@@ -97,6 +101,16 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
         }
     };
 
+    const toNext = () => {
+        const numScreen = setting.screenPerRow * flashCard.length;
+        setCursor((cursor + 1) % numScreen);
+    };
+
+    const toPrev = () => {
+        const numScreen = setting.screenPerRow * flashCard.length;
+        setCursor((cursor - 1 + numScreen) % numScreen);
+    };
+
     const generateFlashCard = () => {
         console.log(JSON.stringify(setting));
         localStorage.setItem(localStorageKey, JSON.stringify(setting));
@@ -143,7 +157,7 @@ export function FlashCardProvider({ children }: { children?: ReactNode }) {
     }, []);
 
     return (
-        <FlashCardContext.Provider value={{ flashCard, cursor, setting, setFlashCard, setCursor, setSetting, handleFileChange, submitFileUrl, handleKeyPress, generateFlashCard, getDisplay }}>
+        <FlashCardContext.Provider value={{ flashCard, cursor, setting, setFlashCard, setCursor, setSetting, handleFileChange, submitFileUrl, handleKeyPress, generateFlashCard, getDisplay, toNext, toPrev }}>
             {children}
         </FlashCardContext.Provider>
     )
