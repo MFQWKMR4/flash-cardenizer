@@ -41,6 +41,18 @@ function App() {
   );
 }
 
+const handleSpeak = (text: string) => {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.pitch = 1; // ピッチを設定（0～2）
+    utterance.rate = 1; // 速度を設定（0.1～10）
+    utterance.lang = 'en-US'; // 言語を設定
+    window.speechSynthesis.speak(utterance);
+  } else {
+    alert('Speech synthesis not supported in this browser.');
+  }
+};
+
 function FlashCardContainer(props: { cursor: number }) {
 
   const { incrementNgCount } = useRecord();
@@ -53,9 +65,12 @@ function FlashCardContainer(props: { cursor: number }) {
       <h1 className="text-3xl font-bold underline">Flash Card</h1>
       <div className="flex flex-col justify-center mt-8">
         {displayStrings.map((displayString, index) => (
-          <div key={index} className="border p-4 mt-2">
-            {displayString}
-          </div>
+          <>
+            <div key={index} className="border p-4 mt-2" >
+              {displayString}
+            </div>
+            <Button onClick={() => { handleSpeak(displayString) }}>Listen</Button>
+          </>
         ))}
         <Button onClick={incrementNgCount}>+NG</Button>
         <div className="flex justify-between">
